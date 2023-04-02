@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Hexo</title>
+  <title>ljxxxxx</title>
   
+  <subtitle>宏愿纵未了 奋斗总不太晚</subtitle>
+  <link href="http://ljx-go.top/atom.xml" rel="self"/>
   
-  <link href="http://example.com/atom.xml" rel="self"/>
-  
-  <link href="http://example.com/"/>
+  <link href="http://ljx-go.top/"/>
   <updated>2023-03-28T16:52:44.706Z</updated>
-  <id>http://example.com/</id>
+  <id>http://ljx-go.top/</id>
   
   <author>
-    <name>John Doe</name>
+    <name>ljxxxxx</name>
     
   </author>
   
@@ -18,8 +18,8 @@
   
   <entry>
     <title>test_my_site</title>
-    <link href="http://example.com/2023/03/29/test-my-site/"/>
-    <id>http://example.com/2023/03/29/test-my-site/</id>
+    <link href="http://ljx-go.top/2023/03/29/test-my-site/"/>
+    <id>http://ljx-go.top/2023/03/29/test-my-site/</id>
     <published>2023-03-28T16:52:44.000Z</published>
     <updated>2023-03-28T16:52:44.706Z</updated>
     
@@ -31,8 +31,8 @@
   
   <entry>
     <title>Hello World</title>
-    <link href="http://example.com/2023/03/29/hello-world/"/>
-    <id>http://example.com/2023/03/29/hello-world/</id>
+    <link href="http://ljx-go.top/2023/03/29/hello-world/"/>
+    <id>http://ljx-go.top/2023/03/29/hello-world/</id>
     <published>2023-03-28T16:52:09.484Z</published>
     <updated>2023-03-28T16:52:09.484Z</updated>
     
