@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>LampSecurityCTF5</title>
+      <link href="/2023/04/15/LampSecurityCTF5/"/>
+      <url>/2023/04/15/LampSecurityCTF5/</url>
+      
+        <content type="html"><![CDATA[<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><h3 id="主机发现"><a href="#主机发现" class="headerlink" title="主机发现"></a>主机发现</h3><p><code>sudo nmap -sn 192.168.37.0/24</code></p><p><img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230412200832911.png" alt="image-20230412200832911"></p><p>主机IP：192.168.37.152</p><h3 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h3><p><code>sudo nmap --min-rate 10000 -p- 192.168.37.152</code></p><p><img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230412201438001.png" alt="image-20230412201438001"></p><p>发现以上端口服务</p><p><code>sudo nmap -sT -sV -O -p22,25,80,110,111,139,143,445,901,3306 192.168.37.152</code></p><p><img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230412201610962.png" alt="image-20230412201610962"></p><h2 id="WEB渗透"><a href="#WEB渗透" class="headerlink" title="WEB渗透"></a>WEB渗透</h2><p>访问80端口</p><p><img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230412202201819.png" alt="image-20230412202201819"></p><h3 id="目录扫描"><a href="#目录扫描" class="headerlink" title="目录扫描"></a>目录扫描</h3><p><code>dirsearch -u 192.168.37.152 -e * </code></p><p><img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230412202745289.png" alt="image-20230412202745289"></p><p><img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230412202801602.png" alt="image-20230412202801602"></p><p><img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230412202821070.png" alt="image-20230412202821070"></p><p>存在好几个登陆入口</p><h3 id="指纹利用"><a href="#指纹利用" class="headerlink" title="指纹利用"></a>指纹利用</h3><p>在首页中点击Blog进入Andy Carp’s Blog页面，该博客以NanoCMS作为框架</p><p><img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230415142928929.png" alt="image-20230415142928929"></p><p>存在需要管理员权限的RCE漏洞</p><p><img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230415143019896.png" alt="image-20230415143019896"></p><p>存在一个信息泄露</p><p>访问&#x2F;data&#x2F;pagesdata.txt </p><p><img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230415143229206.png" alt="image-20230415143229206"></p><p>一段序列化的内容，里面存放着passwd密文</p><p>用hash-indentifier密文识别</p><p><img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230415143347106.png" alt="image-20230415143347106"></p><p>大概率是md5加密</p><p><img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230415143511983.png" alt="image-20230415143511983"></p><p>密码为shannon</p><p><img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230415143858008.png" alt="image-20230415143858008"></p><p>修改page内容，写入一句话木马反弹shell</p><p><img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230415144848386.png" alt="image-20230415144848386"></p><p>访问 <code>../index.php?page=contact</code>后</p><p><img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230415144910777.png" alt="image-20230415144910777"></p><p>成功反弹shell</p><h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>查看&#x2F;etc&#x2F;passwd文件，存在多个用户账号<img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230415150344219.png" alt="image-20230415150344219"></p><blockquote><p><strong>“用户标识号”</strong></p><p>用户的uid,一般情况下root为0，1-499默认为系统账号，有的更大些到1000，500-65535为用户的可登录账号，有的系统从1000开始。</p></blockquote><p><strong>用户比较多的情况下，利用全局搜索出关于相关用户的记录</strong></p><p><code>grep -R -i pass /home/* 2&gt;/dev/null</code></p><p><img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230415151236046.png" alt="image-20230415151236046"></p><p><code>cat /home/patrick/.tomboy/481bca0d-7206-45dd-a459-a72ea1131329.note</code></p><p><img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230415151307672.png" alt="image-20230415151307672"></p><p><img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230415151723936.png" alt="image-20230415151723936"></p><blockquote><p>standard in must be a tty</p><p>通常是由于命令在非交互式 shell 环境下运行而导致的。当您尝试在一个非交互式 shell 环境中运行需要从标准输入读取数据的命令时，就会出现这个错误.</p></blockquote><p>因此通过python切换交互<code>python -c &quot;import pty; pty.spawn(&#39;/bin/sh&#39;)&quot;</code></p><blockquote><p>这个命令可以在当前终端创建一个交互式的 shell，通常用于在一个没有完整 shell 权限的终端中提升权限。</p></blockquote><p>成功提权</p><p><img src="C:\Users\ljx\AppData\Roaming\Typora\typora-user-images\image-20230415151958262.png" alt="image-20230415151958262"></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> vulnhub靶机 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>LampSecurityCTF4</title>
       <link href="/2023/03/29/LampSecurityCTF4/"/>
       <url>/2023/03/29/LampSecurityCTF4/</url>
