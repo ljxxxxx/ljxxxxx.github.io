@@ -6,7 +6,7 @@
   <link href="http://ljx-go.top/atom.xml" rel="self"/>
   
   <link href="http://ljx-go.top/"/>
-  <updated>2023-04-15T07:41:58.603Z</updated>
+  <updated>2023-04-20T07:43:08.549Z</updated>
   <id>http://ljx-go.top/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title></title>
+    <link href="http://ljx-go.top/2023/04/19/pWnOS%202.0/"/>
+    <id>http://ljx-go.top/2023/04/19/pWnOS%202.0/</id>
+    <published>2023-04-19T13:51:15.000Z</published>
+    <updated>2023-04-20T07:43:08.549Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h1><p><img src="/2023/04/19/pWnOS%202.0/image-20230419184837454.png" alt="image-20230419184837454"></p><p>需要设置网络</p><p><img src="/2023/04/19/pWnOS%202.0/image-20230419190518461.png" alt="image-20230419190518461"></p><h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><h3 id="主机发现"><a href="#主机发现" class="headerlink" title="主机发现"></a>主机发现</h3><p><img src="/2023/04/19/pWnOS%202.0/image-20230419190720917.png" alt="image-20230419190720917"></p><p>靶机ip:10.10.10.101</p><h3 id="端口扫描"><a href="#端口扫描" class="headerlink" title="端口扫描"></a>端口扫描</h3><p><img src="/2023/04/19/pWnOS%202.0/image-20230419190842652.png" alt="image-20230419190842652"></p><p><img src="/2023/04/19/pWnOS%202.0/image-20230419191031046.png" alt="image-20230419191031046"></p><p><img src="/2023/04/19/pWnOS%202.0/image-20230419191453168.png" alt="image-20230419191453168"></p><p>只有80端口，目标明确直接开始web渗透</p><h2 id="web渗透"><a href="#web渗透" class="headerlink" title="web渗透"></a>web渗透</h2><h3 id="目录爆破"><a href="#目录爆破" class="headerlink" title="目录爆破"></a>目录爆破</h3><p><img src="/2023/04/19/pWnOS%202.0/image-20230419193922789.png" alt="image-20230419193922789"></p><p>访问blog，存在一个登陆窗口 尝试sql注入失败</p><p><img src="/2023/04/19/pWnOS%202.0/image-20230420112011263.png" alt="image-20230420112011263"></p><h3 id="CMS指纹利用"><a href="#CMS指纹利用" class="headerlink" title="CMS指纹利用"></a>CMS指纹利用</h3><p>Ctrl + U 查看网页源码</p><p><img src="/2023/04/19/pWnOS%202.0/image-20230419194252821.png" alt="image-20230419194252821"></p><p>发现网站的cms</p><p>用searchexploit查看exp</p><p><img src="/2023/04/19/pWnOS%202.0/image-20230420112128829.png" alt="image-20230420112128829"></p><p>下载利用文件  perl 1191.pl执行</p><p><img src="/2023/04/19/pWnOS%202.0/image-20230420112200588.png" alt="image-20230420112200588"></p><p>经测试-e中的1和2无法正常使用 尝试用3修改账号密码，登陆blog</p><p><img src="/2023/04/19/pWnOS%202.0/image-20230420145632076.png" alt="image-20230420145632076"></p><p><img src="/2023/04/19/pWnOS%202.0/image-20230420145648090.png" alt="image-20230420145648090"></p><p>出现一些新功能</p><p><img src="/2023/04/19/pWnOS%202.0/image-20230420145711342.png" alt="image-20230420145711342"></p><h3 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h3><p>文件上传，上传shell，尝试访问&#x2F;images&#x2F;shell.php 本地监听1234端口，反弹shell</p><p><img src="/2023/04/19/pWnOS%202.0/image-20230420150019130.png" alt="image-20230420150019130"></p><h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>存在root 用户and dan用户</p><p><img src="/2023/04/19/pWnOS%202.0/image-20230420153811528.png" alt="image-20230420153811528"></p><p>查看mysqli_connect.php获得数据库账号密码</p><p><img src="/2023/04/19/pWnOS%202.0/image-20230420151457324.png" alt="image-20230420151457324"></p><p>显示密码错误。大概是一个旧的数据库文件，利用全局搜索查看系统中是否还存在mysqli_connect.php文件</p><p><img src="/2023/04/19/pWnOS%202.0/image-20230420151708725.png" alt="image-20230420151708725"></p><p><img src="/2023/04/19/pWnOS%202.0/image-20230420151821123.png" alt="image-20230420151821123"></p><p>获得另一个新的账号密码</p><p><img src="/2023/04/19/pWnOS%202.0/image-20230420151849828.png" alt="image-20230420151849828"></p><p>在mysql数据库的users表中查到内容<img src="/2023/04/19/pWnOS%202.0/image-20230420152230801.png" alt="image-20230420152230801"></p><p>hash-identifier识别为SHA-1</p><p><img src="/2023/04/19/pWnOS%202.0/image-20230420153058676.png" alt="image-20230420153058676"></p><p><a href="https://hashes.com/en/decrypt/hash">https://hashes.com/en/decrypt/hash</a></p><p><img src="/2023/04/19/pWnOS%202.0/image-20230420153031328.png" alt="image-20230420153031328"></p><p><img src="/2023/04/19/pWnOS%202.0/image-20230420153658422.png" alt="image-20230420153658422"></p><p><img src="/2023/04/19/pWnOS%202.0/image-20230420154002193.png" alt="image-20230420154002193"></p><p>在mysqli_connect.php中也存在账号密码登陆数据库，尝试用该密码登陆root账号 成功登陆（往往网站管理员会在不同地方设置相同的账号密码）</p><p><img src="/2023/04/19/pWnOS%202.0/image-20230420154117645.png" alt="image-20230420154117645"></p><p>成功提权root用户</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;描述&quot;&gt;&lt;a href=&quot;#描述&quot; class=&quot;headerlink&quot; title=&quot;描述&quot;&gt;&lt;/a&gt;描述&lt;/h1&gt;&lt;p&gt;&lt;img src=&quot;/2023/04/19/pWnOS%202.0/image-20230419184837454.png&quot; alt=&quot;im</summary>
+      
+    
+    
+    
+    
+    <category term="vulnhub靶机" scheme="http://ljx-go.top/tags/vulnhub%E9%9D%B6%E6%9C%BA/"/>
+    
+  </entry>
   
   <entry>
     <title>LampSecurityCTF5</title>
