@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Tr0ll"><meta name="keywords" content="vulnhub靶机"><meta name="author" content="ljxxxxx"><meta name="copyright" content="ljxxxxx"><title>Tr0ll | ljxxxxx'blog</title><link rel="shortcut icon" href="/favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '6.3.0'
+} </script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="ljxxxxx'blog" type="application/atom+xml">
+</head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-number">1.</span> <span class="toc-text">信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#nmap%E6%89%AB%E6%8F%8F"><span class="toc-number">1.1.</span> <span class="toc-text">nmap扫描</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ftp%E5%8C%BF%E5%90%8D%E7%99%BB%E9%99%86"><span class="toc-number">2.</span> <span class="toc-text">ftp匿名登陆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#pcap%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">pcap流量分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#80%E7%AB%AF%E5%8F%A3"><span class="toc-number">4.</span> <span class="toc-text">80端口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E6%9D%83"><span class="toc-number">5.</span> <span class="toc-text">提权</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="http://42.193.172.120:8088/images/2023/04/02/2.jpg"></div><div class="author-info__name text-center">ljxxxxx</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">10</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">1</span></a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://w.wallhaven.cc/full/zy/wallhaven-zyxvqy.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">ljxxxxx'blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">Tr0ll</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2023-05-08</time><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">572</span><span class="post-meta__separator">|</span><span>阅读时长: 1 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><h3 id="nmap扫描"><a href="#nmap扫描" class="headerlink" title="nmap扫描"></a>nmap扫描</h3><p><img src="/2023/05/08/Tr0ll/image-20230507231822026.png" alt="image-20230507231822026"></p>
+<p>主机ip地址为：192.168.37.129</p>
+<p><img src="/2023/05/08/Tr0ll/image-20230507231841442.png" alt="image-20230507231841442"></p>
+<p>主机开放端口：21，22，80</p>
+<h2 id="ftp匿名登陆"><a href="#ftp匿名登陆" class="headerlink" title="ftp匿名登陆"></a>ftp匿名登陆</h2><p>成功匿名登陆，发现pcap流量数据包，get下载到本地用wireshark打开</p>
+<p><img src="/2023/05/08/Tr0ll/image-20230507231853919.png" alt="image-20230507231853919"></p>
+<h2 id="pcap流量分析"><a href="#pcap流量分析" class="headerlink" title="pcap流量分析"></a>pcap流量分析</h2><p><img src="/2023/05/08/Tr0ll/image-20230508143724860.png" alt="image-20230508143724860"></p>
+<blockquote>
+<p><code>RETR</code>是FTP协议中的一个命令，”RETR”是”Retrieve”的缩写，指示FTP服务器将指定的文件发送到FTP客户端。</p>
+<p>在FTP会话中，客户端可以使用”RETR”命令向服务器请求文件，服务器将文件作为响应发送回客户端。</p>
+<p>FTP客户端将发送命令到FTP服务器，并等待服务器响应。如果文件存在并且客户端有足够的权限访问该文件，则FTP服务器将发送文件内容作为响应。客户端将接收到的数据写入本地文件，以完成下载过程。</p>
+</blockquote>
+<p><img src="/2023/05/08/Tr0ll/image-20230508145300570.png" alt="image-20230508145300570"></p>
+<p>在FTP-DATA协议中存在命令的响应内容，提示 sup3rs3cr3tdirlol，super secret dir </p>
+<p>在web服务中访问一下该文件夹</p>
+<h2 id="80端口"><a href="#80端口" class="headerlink" title="80端口"></a>80端口</h2><p>下载该文件</p>
+<p><img src="/2023/05/08/Tr0ll/image-20230508145555350.png" alt="image-20230508145555350"></p>
+<p><img src="/2023/05/08/Tr0ll/image-20230508152317759.png" alt="image-20230508152317759"></p>
+<p>提示address 尝试访问&#x2F;0x0856BF&#x2F;  获得新目录</p>
+<p><img src="/2023/05/08/Tr0ll/image-20230508152426222.png" alt="image-20230508152426222"></p>
+<p>将新目录中的文件夹下载到本地查看内容</p>
+<p><img src="/2023/05/08/Tr0ll/image-20230508153030945.png" alt="image-20230508153030945"></p>
+<p>疑似which_one_lol.txt文件中的内容是用户名，此时思路就是用crackmapexec密码喷射破解</p>
+<blockquote>
+<p>crackmapexec 命令介绍</p>
+<p>CrackMapExec是一个开源的渗透测试工具，用于评估网络安全，它可以帮助安全专业人员评估网络中的弱点。CrackMapExec支持多种协议，如SMB、LDAP、HTTP等，可以用于口令破解、漏洞利用、信息收集等任务。</p>
+</blockquote>
+<p><img src="/2023/05/08/Tr0ll/image-20230508153946048.png" alt="image-20230508153946048"></p>
+<blockquote>
+<p>crackmapexec ssh –help</p>
+<p>–continue-on-success<br>                        continues authentication attempts even after successes</p>
+</blockquote>
+<p>出现报错为无法连接22端口，怀疑是服务器对短时间的ssh登陆进行限制。将文件内容倒转尝试</p>
+<p><img src="/2023/05/08/Tr0ll/image-20230508160326969.png" alt="image-20230508160326969"></p>
+<p>发现密码全是错误的，由于在该文件夹中存在密码的提示，尝试用文件名作为密码进行破解</p>
+<p><img src="/2023/05/08/Tr0ll/image-20230508160227625.png" alt="image-20230508160227625"></p>
+<p><img src="/2023/05/08/Tr0ll/image-20230508160621079.png" alt="image-20230508160621079"></p>
+<p>成功破解出账号密码</p>
+<p><img src="/2023/05/08/Tr0ll/image-20230508161328272.png" alt="image-20230508161328272"></p>
+<h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p><img src="/2023/05/08/Tr0ll/image-20230508162525285.png" alt="image-20230508162525285"></p>
+<p>在ssh连接时，会出现这个导致ssh连接被关闭，怀疑设置了个定时任务，而该定时任务是来自root权限的定时任务，找出该任务并修改对应的脚本即可提权。</p>
+<p><img src="/2023/05/08/Tr0ll/image-20230508163033203.png" alt="image-20230508163033203"></p>
+<p><img src="/2023/05/08/Tr0ll/image-20230508163209439.png" alt="image-20230508163209439"></p>
+<blockquote>
+<p>echo “overflow ALL&#x3D;(ALL)NOPASSWD:ALL” &gt;&gt; &#x2F;etc&#x2F;sudoers</p>
+</blockquote>
+<p><img src="/2023/05/08/Tr0ll/image-20230508163305056.png" alt="image-20230508163305056"></p>
+<p>成功提权</p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">ljxxxxx</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://ljx-go.top/2023/05/08/Tr0ll/">http://ljx-go.top/2023/05/08/Tr0ll/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://ljx-go.top">ljxxxxx'blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/vulnhub%E9%9D%B6%E6%9C%BA/">vulnhub靶机</a></div><nav id="pagination"><div class="next-post pull-right"><a href="/2023/04/21/pWnOS/"><span>pWnOS</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer class="footer-bg" style="background-image: url(https://w.wallhaven.cc/full/zy/wallhaven-zyxvqy.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2013 - 2023 By ljxxxxx</div><div class="framework-info"><span>驱动 - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

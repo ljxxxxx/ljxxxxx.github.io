@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>Tr0ll</title>
+      <link href="/2023/05/08/Tr0ll/"/>
+      <url>/2023/05/08/Tr0ll/</url>
+      
+        <content type="html"><![CDATA[<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><h3 id="nmap扫描"><a href="#nmap扫描" class="headerlink" title="nmap扫描"></a>nmap扫描</h3><p><img src="/2023/05/08/Tr0ll/image-20230507231822026.png" alt="image-20230507231822026"></p><p>主机ip地址为：192.168.37.129</p><p><img src="/2023/05/08/Tr0ll/image-20230507231841442.png" alt="image-20230507231841442"></p><p>主机开放端口：21，22，80</p><h2 id="ftp匿名登陆"><a href="#ftp匿名登陆" class="headerlink" title="ftp匿名登陆"></a>ftp匿名登陆</h2><p>成功匿名登陆，发现pcap流量数据包，get下载到本地用wireshark打开</p><p><img src="/2023/05/08/Tr0ll/image-20230507231853919.png" alt="image-20230507231853919"></p><h2 id="pcap流量分析"><a href="#pcap流量分析" class="headerlink" title="pcap流量分析"></a>pcap流量分析</h2><p><img src="/2023/05/08/Tr0ll/image-20230508143724860.png" alt="image-20230508143724860"></p><blockquote><p><code>RETR</code>是FTP协议中的一个命令，”RETR”是”Retrieve”的缩写，指示FTP服务器将指定的文件发送到FTP客户端。</p><p>在FTP会话中，客户端可以使用”RETR”命令向服务器请求文件，服务器将文件作为响应发送回客户端。</p><p>FTP客户端将发送命令到FTP服务器，并等待服务器响应。如果文件存在并且客户端有足够的权限访问该文件，则FTP服务器将发送文件内容作为响应。客户端将接收到的数据写入本地文件，以完成下载过程。</p></blockquote><p><img src="/2023/05/08/Tr0ll/image-20230508145300570.png" alt="image-20230508145300570"></p><p>在FTP-DATA协议中存在命令的响应内容，提示 sup3rs3cr3tdirlol，super secret dir </p><p>在web服务中访问一下该文件夹</p><h2 id="80端口"><a href="#80端口" class="headerlink" title="80端口"></a>80端口</h2><p>下载该文件</p><p><img src="/2023/05/08/Tr0ll/image-20230508145555350.png" alt="image-20230508145555350"></p><p><img src="/2023/05/08/Tr0ll/image-20230508152317759.png" alt="image-20230508152317759"></p><p>提示address 尝试访问&#x2F;0x0856BF&#x2F;  获得新目录</p><p><img src="/2023/05/08/Tr0ll/image-20230508152426222.png" alt="image-20230508152426222"></p><p>将新目录中的文件夹下载到本地查看内容</p><p><img src="/2023/05/08/Tr0ll/image-20230508153030945.png" alt="image-20230508153030945"></p><p>疑似which_one_lol.txt文件中的内容是用户名，此时思路就是用crackmapexec密码喷射破解</p><blockquote><p>crackmapexec 命令介绍</p><p>CrackMapExec是一个开源的渗透测试工具，用于评估网络安全，它可以帮助安全专业人员评估网络中的弱点。CrackMapExec支持多种协议，如SMB、LDAP、HTTP等，可以用于口令破解、漏洞利用、信息收集等任务。</p></blockquote><p><img src="/2023/05/08/Tr0ll/image-20230508153946048.png" alt="image-20230508153946048"></p><blockquote><p>crackmapexec ssh –help</p><p>–continue-on-success<br>                        continues authentication attempts even after successes</p></blockquote><p>出现报错为无法连接22端口，怀疑是服务器对短时间的ssh登陆进行限制。将文件内容倒转尝试</p><p><img src="/2023/05/08/Tr0ll/image-20230508160326969.png" alt="image-20230508160326969"></p><p>发现密码全是错误的，由于在该文件夹中存在密码的提示，尝试用文件名作为密码进行破解</p><p><img src="/2023/05/08/Tr0ll/image-20230508160227625.png" alt="image-20230508160227625"></p><p><img src="/2023/05/08/Tr0ll/image-20230508160621079.png" alt="image-20230508160621079"></p><p>成功破解出账号密码</p><p><img src="/2023/05/08/Tr0ll/image-20230508161328272.png" alt="image-20230508161328272"></p><h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p><img src="/2023/05/08/Tr0ll/image-20230508162525285.png" alt="image-20230508162525285"></p><p>在ssh连接时，会出现这个导致ssh连接被关闭，怀疑设置了个定时任务，而该定时任务是来自root权限的定时任务，找出该任务并修改对应的脚本即可提权。</p><p><img src="/2023/05/08/Tr0ll/image-20230508163033203.png" alt="image-20230508163033203"></p><p><img src="/2023/05/08/Tr0ll/image-20230508163209439.png" alt="image-20230508163209439"></p><blockquote><p>echo “overflow ALL&#x3D;(ALL)NOPASSWD:ALL” &gt;&gt; &#x2F;etc&#x2F;sudoers</p></blockquote><p><img src="/2023/05/08/Tr0ll/image-20230508163305056.png" alt="image-20230508163305056"></p><p>成功提权</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> vulnhub靶机 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>pWnOS</title>
       <link href="/2023/04/21/pWnOS/"/>
       <url>/2023/04/21/pWnOS/</url>
