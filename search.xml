@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>Kioptrix1.2</title>
+      <link href="/2023/05/12/Kioptrix1.2/"/>
+      <url>/2023/05/12/Kioptrix1.2/</url>
+      
+        <content type="html"><![CDATA[<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><h3 id="nmap端口扫描"><a href="#nmap端口扫描" class="headerlink" title="nmap端口扫描"></a>nmap端口扫描</h3><p><img src="/2023/05/12/Kioptrix1.2/image-20230512204421057.png" alt="image-20230512204421057"></p><p>开启22&#x2F;80端口</p><h3 id="目录扫描"><a href="#目录扫描" class="headerlink" title="目录扫描"></a>目录扫描</h3><p><img src="/2023/05/12/Kioptrix1.2/image-20230512204813358.png" alt="image-20230512204813358"></p><h2 id="web渗透"><a href="#web渗透" class="headerlink" title="web渗透"></a>web渗透</h2><p><img src="/2023/05/12/Kioptrix1.2/image-20230512204826533.png" alt="image-20230512204826533"></p><p><img src="/2023/05/12/Kioptrix1.2/image-20230512205523259.png" alt="image-20230512205523259"></p><p>发现为LotuCMS</p><p><img src="/2023/05/12/Kioptrix1.2/image-20230512205538590.png" alt="image-20230512205538590"></p><p><img src="/2023/05/12/Kioptrix1.2/image-20230512210624840.png" alt="image-20230512210624840"></p><p><img src="/2023/05/12/Kioptrix1.2/image-20230512210645034.png" alt="image-20230512210645034"></p><p>通过searchsploit搜索相关的漏洞利用文件，发现全是xss与crsf漏洞，比较难利用，于是通过搜索引擎搜索其他相关漏洞利用信息，发现以下文章<a href="https://vk9-sec.com/lotuscms-3-0-eval-remote-command-execution/">lotuscms-3-0-eval-remote-command-execution</a></p><p><img src="/2023/05/12/Kioptrix1.2/image-20230512213721703.png" alt="image-20230512213721703"></p><p>成功rce读取&#x2F;etc&#x2F;passwd文件</p><p><img src="/2023/05/12/Kioptrix1.2/image-20230512214326100.png" alt="image-20230512214326100"></p><p>执行反弹shell</p><p><img src="/2023/05/12/Kioptrix1.2/image-20230512214236061.png" alt="image-20230512214236061"></p><p>成功远程连接</p><h2 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h2><p>发现数据库配置文件，获得数据库登陆账号密码：root&#x2F;fuckeyou</p><p><img src="/2023/05/12/Kioptrix1.2/image-20230512222130046.png" alt="image-20230512222130046"></p><p>登陆数据库查看账号信息</p><p><img src="/2023/05/12/Kioptrix1.2/image-20230512222227494.png" alt="image-20230512222227494"></p><p><img src="/2023/05/12/Kioptrix1.2/image-20230512222302549.png" alt="image-20230512222302549"></p><p><img src="/2023/05/12/Kioptrix1.2/image-20230512222327552.png" alt="image-20230512222327552"></p><p><img src="/2023/05/12/Kioptrix1.2/image-20230512223148032.png" alt="image-20230512223148032"></p><p>获得后台登陆的adminz账号：admin&#x2F;n0t7t1k4  但对于提权的利用不大</p><p>获得系统中的用户名以及对应的加密密文</p><p>dreg&#x2F;0d3eccfb887aabd50f243b3f155c0f85</p><p>loneferret&#x2F;5badcaf789d3d1d09794d8f021f40f0e</p><p>在&#x2F;etc&#x2F;passwd能够查看到这两个用户</p><p><img src="/2023/05/12/Kioptrix1.2/image-20230512223336952.png" alt="image-20230512223336952"></p><p>利用john爆破md5密文</p><p><code>john --format=raw-md5 --wordlist=/usr/share/wordlists/rockyou.txt passwd</code></p><p><img src="/2023/05/12/Kioptrix1.2/image-20230512223703622.png" alt="image-20230512223703622"></p><p>登陆</p><p><img src="/2023/05/12/Kioptrix1.2/image-20230512224227780.png" alt="image-20230512224227780"></p><h2 id="进一步提权"><a href="#进一步提权" class="headerlink" title="进一步提权"></a>进一步提权</h2><p>CompanyPolicy.README文件提示ht命令是一个文件编辑器</p><p><img src="/2023/05/12/Kioptrix1.2/image-20230513220350791.png" alt="image-20230513220350791"></p><p>通过sudo -l能够查看ht命令的执行权限是root权限，能够更改&#x2F;etc&#x2F;sudoers文件，在文件内添加&#x2F;bin&#x2F;bash命令执行权限，最后成功提权</p><p><img src="/2023/05/12/Kioptrix1.2/image-20230513220901613.png" alt="image-20230513220901613"></p><p><img src="/2023/05/12/Kioptrix1.2/image-20230513220940228.png" alt="image-20230513220940228"></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> vulnhub靶机 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Billu_b0x</title>
       <link href="/2023/05/10/Billu_b0x/"/>
       <url>/2023/05/10/Billu_b0x/</url>
@@ -61,7 +80,7 @@
     
     
     <entry>
-      <title>pWnOS2.0</title>
+      <title>pWnOS2</title>
       <link href="/2023/04/19/pWnOS2/"/>
       <url>/2023/04/19/pWnOS2/</url>
       
